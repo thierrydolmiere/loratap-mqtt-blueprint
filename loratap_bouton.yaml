@@ -1,0 +1,106 @@
+blueprint:
+  name: LoraTap - 3 boutons (MQTT direct)
+  description: >-
+    Gère les 3 boutons d'une télécommande Zigbee2MQTT via son topic MQTT :
+    appui simple, double et long pour chaque bouton (9 actions au total).
+    Pattern : trigger large + condition + choose.
+  domain: automation
+  input:
+    topic:
+      name: Topic MQTT du device
+      description: "Le topic Zigbee2MQTT exact du device (copié de l'onglet d'écoute). Ex. zigbee2mqtt/Loratap Remote"
+      selector:
+        text: {}
+    b1_simple:
+      name: Bouton 1 - appui simple
+      default: []
+      selector:
+        action: {}
+    b1_double:
+      name: Bouton 1 - appui double
+      default: []
+      selector:
+        action: {}
+    b1_long:
+      name: Bouton 1 - appui long
+      default: []
+      selector:
+        action: {}
+    b2_simple:
+      name: Bouton 2 - appui simple
+      default: []
+      selector:
+        action: {}
+    b2_double:
+      name: Bouton 2 - appui double
+      default: []
+      selector:
+        action: {}
+    b2_long:
+      name: Bouton 2 - appui long
+      default: []
+      selector:
+        action: {}
+    b3_simple:
+      name: Bouton 3 - appui simple
+      default: []
+      selector:
+        action: {}
+    b3_double:
+      name: Bouton 3 - appui double
+      default: []
+      selector:
+        action: {}
+    b3_long:
+      name: Bouton 3 - appui long
+      default: []
+      selector:
+        action: {}
+mode: single
+triggers:
+  - trigger: mqtt
+    topic: !input topic
+conditions:
+  - condition: template
+    value_template: "{{ trigger.payload_json.action is defined }}"
+actions:
+  - choose:
+      # ── Bouton 1
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.payload_json.action == '1_single' }}"
+        sequence: !input b1_simple
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.payload_json.action == '1_double' }}"
+        sequence: !input b1_double
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.payload_json.action == '1_hold' }}"
+        sequence: !input b1_long
+      # ── Bouton 2
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.payload_json.action == '2_single' }}"
+        sequence: !input b2_simple
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.payload_json.action == '2_double' }}"
+        sequence: !input b2_double
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.payload_json.action == '2_hold' }}"
+        sequence: !input b2_long
+      # ── Bouton 3
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.payload_json.action == '3_single' }}"
+        sequence: !input b3_simple
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.payload_json.action == '3_double' }}"
+        sequence: !input b3_double
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.payload_json.action == '3_hold' }}"
+        sequence: !input b3_long
