@@ -8,6 +8,14 @@ Testé et validé avec :
 - Home Assistant + add-on **Zigbee2MQTT** + broker **Mosquitto**
 - Intégration **MQTT** installée dans Home Assistant
 
+## Prérequis
+
+1. **Home Assistant** (syntaxe YAML moderne `triggers:`/`actions:`).
+2. Un broker MQTT — l'add-on **Mosquitto broker** par exemple.
+3. **Zigbee2MQTT** (add-on ou installation standalone) avec la télécommande LoraTap appairée et opérationnelle.
+4. L'**intégration MQTT** installée dans Home Assistant (**Paramètres → Appareils et services → Ajouter une intégration → MQTT**). C'est le pont entre le broker et HA : sans elle, aucun trigger MQTT ne fonctionne, aucun onglet MQTT dans les Outils de développement, aucune entité MQTT.
+5. Connaître le **topic MQTT exact** de la télécommande : dans Zigbee2MQTT, ouvrir le device et lire le champ *MQTT base topic* (ou écouter dans HA via **Outils de développement → MQTT → Écouter** et appuyer sur les boutons).
+
 ## Pourquoi ce pattern ?
 
 Ce blueprint utilise directement le trigger MQTT sur le topic du device (`zigbee2mqtt/Loratap Remote` par exemple) plutôt que l'entité `event.*` ou le capteur d'action de Zigbee2MQTT. Sur certaines télécommandes, l'exposition de ces entités est capricieuse ; le trigger MQTT brut fonctionne dans tous les cas.
